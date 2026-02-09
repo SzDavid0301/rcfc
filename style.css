@@ -1,0 +1,72 @@
+body {
+    background: #0f0f1a;
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.box {
+    background: #1a1a2e;
+    padding: 30px;
+    border-radius: 15px;
+    width: 380px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    border: 1px solid #252545;
+}
+
+.hidden { display: none; }
+
+h2 { color: #00d2ff; margin-top: 0; text-align: center; }
+
+.input-group { margin-bottom: 15px; }
+label { display: block; margin-bottom: 5px; font-size: 0.9rem; color: #aaa; }
+
+input, select {
+    width: 100%;
+    padding: 12px;
+    background: #101026;
+    border: 1px solid #2d2d5f;
+    border-radius: 8px;
+    color: white;
+    box-sizing: border-box;
+}
+
+.main-btn {
+    width: 100%;
+    padding: 15px;
+    background: #00d2ff;
+    border: none;
+    border-radius: 8px;
+    color: #0f0f1a;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.main-btn:hover { background: #009ec2; }
+
+/* Chat stílusok */
+.chat-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #2d2d5f; padding-bottom: 10px; }
+.back-btn { background: #333; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
+
+.chat-window {
+    height: 300px;
+    background: #0a0a14;
+    overflow-y: auto;
+    margin: 15px 0;
+    padding: 15px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.msg { padding: 10px; margin-bottom: 10px; border-radius: 10px; max-width: 85%; font-size: 0.95rem; line-height: 1.4; }
+.user { background: #00d2ff; color: #000; align-self: flex-end; border-bottom-right-radius: 0; }
+.admin { background: #2d2d5f; color: #fff; align-self: flex-start; border-bottom-left-radius: 0; }
+
+.chat-input-area { display: flex; gap: 10px; }
+.chat-input-area button { background: #00d2ff; border: none; padding: 10px 15px; border-radius: 8px; cursor: pointer; font-weight: bold; }

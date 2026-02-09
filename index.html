@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RC-FC Kereskedő Központ</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+        <div id="calc-panel" class="box">
+            <h2>Kereskedelmi Panel</h2>
+            <div class="input-group">
+                <label>Játékosneved:</label>
+                <input type="text" id="pName" placeholder="Játékosnév">
+            </div>
+            <div class="input-group">
+                <label>Mennyiség:</label>
+                <input type="number" id="pAmount" placeholder="pl 400">
+            </div>
+            <div class="input-group">
+                <label>Váltás típusa:</label>
+                <select id="pDirection">
+                    <option value="fc-to-rc">FC-t adok (RC x2 jár)</option>
+                    <option value="rc-to-fc">RC-t adok (FC /2 jár)</option>
+                </select>
+            </div>
+            <button class="main-btn" onclick="inditas()">Ajánlat küldése</button>
+        </div>
+
+        <div id="chat-panel" class="box hidden">
+            <div class="chat-header">
+                <h3>Ügyfélszolgálat</h3>
+                <button class="back-btn" onclick="vissza()">« Vissza</button>
+            </div>
+            <div id="chat-logs" class="chat-window"></div>
+            <div class="chat-input-area">
+                <input type="text" id="msgInput" placeholder="Írj a botnak...">
+                <button onclick="kuld()">Küldés</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
