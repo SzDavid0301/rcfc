@@ -2,28 +2,36 @@
 <html lang="hu">
 <head>
     <meta charset="UTF-8">
-    <title>Kereskedelmi Chat</title>
+    <title>Kereskedelmi Panel</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
         <div id="calc-panel">
             <h2>💰 Váltó Rendszer</h2>
-            <input type="text" id="pName" placeholder="Neved...">
+            <input type="text" id="pName" placeholder="Minecraft neved...">
+            
             <select id="pDirection">
                 <option value="fc-to-rc">FC -> RC (5% adó)</option>
                 <option value="rc-to-fc">RC -> FC (10% adó)</option>
             </select>
+            
             <input type="number" id="pAmount" placeholder="Összeg (min. 1000)">
+            
+            <div style="text-align: left; margin: 10px 5px; font-size: 13px; color: #8b949e;">
+                <input type="checkbox" id="onlinePay" style="width: auto; margin-right: 8px;"> 
+                <label for="onlinePay">Online levonást kérek (nem lépek fel)</label>
+            </div>
+
             <div id="error-msg"></div>
-            <button onclick="inditas()">Ajánlat kérése</button>
+            <button onclick="inditas()">Ajánlat küldése</button>
         </div>
 
         <div id="chat-panel" class="hidden">
-            <h2>💬 Élő Ügyfélszolgálat</h2>
+            <h2>💬 Élő Chat</h2>
             <div id="chat-logs"></div>
             <div class="chat-input-area">
-                <input type="text" id="msgInput" placeholder="Üzenet küldése...">
+                <input type="text" id="msgInput" placeholder="Írj valamit...">
                 <button onclick="kuld()">Küldés</button>
             </div>
             <button class="back-btn" onclick="vissza()">Vissza</button>

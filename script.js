@@ -1,57 +1,68 @@
 const DISCORD_WEBHOOK = "IDE_MASOLD_A_LINKET";
 const MIN_LIMIT = 1000;
-const BAN_TIME = 300000; 
+const BAN_TIME = 300000; // 5 perc
 const csunyaSzavak = ["kurva", "geci", "fasz", "bazmeg", "buzi", "anyád"];
 
 window.onload = function() {
     ellenorizTiltast();
     
+    // Billentyűzet figyelés (Enter)
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
-            if (!document.getElementById('chat-panel').classList.contains('hidden')) kuld();
+            const chatPanelVisible = !document.getElementById('chat-panel').classList.contains('hidden');
+            if (chatPanelVisible) kuld();
             else inditas();
         }
     });
 
-    setInterval(ellenorizTiltast, 10000); 
+    // Időzítő a némítás lejártának figyeléséhez
+    setInterval(ellenorizTiltast, 2000); 
 };
 
-// ÉKEZETMENTESÍTŐ FÜGGVÉNY (Hogy a bot bárhogy megértse)
-function ekezetmentesites(str) {
+// Segédfunkció: Ékezetek eltávolítása és kisbetűsítés
+function normalizal(str) {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
 }
 
 function ellenorizTiltast() {
     const tiltasVege = localStorage.getItem('tiltas_lejarat');
     if (tiltasVege) {
-        const hatralevoIdo = tiltasVege - Date.now();
-        if (hatralevoIdo > 0) {
-            const percek = Math.floor(hatralevoIdo / 60000);
-            const masodpercek = Math.floor((hatralevoIdo % 60000) / 1000);
+        const most = Date.now();
+        const hatralevo = tiltasVege - most;
+
+        if (hatralevo > 0) {
+            const p = Math.floor(hatralevo / 60000);
+            const m = Math.floor((hatralevo % 60000) / 1000);
             
+            // Panel kezelés tiltás alatt
             document.getElementById('calc-panel').classList.add('hidden');
             document.getElementById('chat-panel').classList.remove('hidden');
             document.querySelector('.chat-input-area').style.display = "none";
             
-            const l = document.getElementById('chat-logs');
-            l.innerHTML = `<div class="msg-wrapper admin-wrapper"><div class="msg admin"><b>Rendszer</b>⚠️ Némítva vagy!<br>Hátralévő idő: <b>${percek}p ${masodpercek}mp</b></div></div>`;
+            document.getElementById('chat-logs').innerHTML = `
+                <div class="msg-wrapper admin-wrapper">
+                    <div class="msg admin">
+                        <b>Rendszer</b>
+                        ⚠️ Némítva vagy káromkodás miatt!<br>
+                        Visszakapcsolás: <b>${p}p ${m}mp</b> múlva.
+                    </div>
+                </div>`;
             return true;
         } else {
             localStorage.removeItem('tiltas_lejarat');
-            document.querySelector('.chat-input-area').style.display = "flex";
+            location.reload(); // Frissítünk, hogy minden gomb visszajöjjön
         }
     }
     return false;
 }
 
-function botValaszol(u) {
+function botValaszol(nyersUzenet) {
     if (ellenorizTiltast()) return;
     
-    // Az üzenet feldolgozása: kisbetű + ékezetek eltávolítása
-    const msg = ekezetmentesites(u);
+    const msg = normalizal(nyersUzenet);
 
-    // 1. Káromkodás szűrés (ékezet nélkül is fogja!)
-    if (csunyaSzavak.some(s => ekezetmentesites(msg).includes(ekezetmentesites(s)))) {
+    // 1. Káromkodás csekkolás
+    if (csunyaSzavak.some(s => normalizal(msg).includes(normalizal(s)))) {
         localStorage.setItem('tiltas_lejarat', Date.now() + BAN_TIME);
         ellenorizTiltast();
         return;
@@ -59,32 +70,41 @@ function botValaszol(u) {
 
     let valasz = "";
 
-    // 2. OKOSABB VÁLASZ LOGIKA (Ékezetmentes kulcsszavakkal)
-    if (msg.includes("mennyi") || msg.includes("arfolyam") || msg.includes("kapok") || msg.includes("arany")) {
-        valasz = "Az árfolyam fix: FC -> RC esetén 2x szorzó (5% adó), RC -> FC esetén 0.5x szorzó (10% adó). A kalkulátor már a levont összeget mutatta!";
+    // 2. PRIORITÁS ALAPÚ VÁLASZOK (A Bot "agya")
+    
+    // IDŐ ÉS VÁRAKOZÁS (Ez az első, mert ez a leggyakoribb kérdés)
+    if (msg.includes("mikor") || msg.includes("ido") || msg.includes("varni") || msg.includes("soka") || msg.includes("lassu")) {
+        valasz = "Az adminisztrátorok éppen kaptak egy értesítést a Discord szerverünkön a váltási szándékodról. Általában 5 és 10 perc közötti időt vesz igénybe, amíg egy illetékes kolléga fel tud lépni és lebonyolítja az üzletet. Kérlek, légy türelemmel, ne zárd be az ablakot!";
     }
-    else if (msg.includes("mikor") || msg.includes("hol van") || msg.includes("ido") || msg.includes("varni") || msg.includes("lassu") || msg.includes("soka")) {
-        valasz = "Az adminisztrátorok értesítve lettek! Általában 5-10 perc, amíg be tudnak lépni. Kérlek, várj türelemmel!";
+    // ONLINE FIZETÉS
+    else if (msg.includes("online") || msg.includes("szerver nelkul") || msg.includes("fellepes nelkul") || msg.includes("nem tudok fellepni")) {
+        valasz = "Igen, természetesen van lehetőség online kifizetésre is! Ebben az esetben nem kell feljönnöd a szerverre. Ha bepipáltad az opciót, az adminisztrátorunk a háttérben (az adatbázisunkon keresztül) vonja le a váltandó összeget és írja jóvá neked a váltást.";
     }
-    else if (msg.includes("szia") || msg.includes("hello") || msg.includes("udv") || msg.includes("hali")) {
-        valasz = "Szia! Én a segéd-bot vagyok. Az ajánlatodat rögzítettem, az adminok hamarosan érkeznek.";
+    // ÁRFOLYAM ÉS SZÁMÍTÁS
+    else if (msg.includes("mennyi") || msg.includes("arfolyam") || msg.includes("kapok") || msg.includes("szamold") || msg.includes("arany")) {
+        valasz = "A váltási árfolyam nálunk rögzített. FC-ből RC-be 2x-es szorzóval váltunk (5% adó mellett), míg RC-ből FC-be 0.5x-ös szorzóval (10% adó mellett). A rendszerünk már elvégezte a matematikai számítást, így amit a chaten látsz összeget, azt fogod kézhez kapni.";
     }
+    // ADÓK ÉS LEVONÁSOK
     else if (msg.includes("ado") || msg.includes("levon") || msg.includes("szazalek") || msg.includes("jutalek")) {
-        valasz = "Az adót (5% vagy 10%) a rendszer már levonta. Amit a chaten látsz összeget, az már a nettó, amit megkapsz.";
+        valasz = "Az adók a szerver fenntartását szolgálják. Jelenleg FC váltásnál 5%, RC váltásnál pedig 10% a levonás mértéke. Fontos: ezt a botunk már levonta az általad beírt összegből, tehát a 'Jár neked' rész már a nettó értéket mutatja.";
     }
-    else if (msg.includes("biztos") || msg.includes("atver") || msg.includes("megbizhato") || msg.includes("scam")) {
-        valasz = "Nálunk nincs átverés! Minden üzlet naplózva van Discordon, és csak hivatalos adminok intézik.";
+    // KÖSZÖNÉS ÉS ÜDVÖZLÉS
+    else if (msg.includes("szia") || msg.includes("hello") || msg.includes("udv") || msg.includes("hali") || msg.includes("jo napot")) {
+        valasz = "Üdvözöllek! Én a Kereskedelmi Segéd Bot vagyok. Rögzítettem a nevedet és a váltási igényedet. Az adminok hamarosan csatlakoznak a beszélgetéshez. Van esetleg valamilyen technikai kérdésed addig?";
     }
+    // KÖSZÖNET ÉS ELUTASÍTÁS
     else if (msg.includes("koszi") || msg.includes("koszonom") || msg.includes("rendben") || msg.includes("oke") || msg.includes("ertem")) {
-        valasz = "Nagyon szívesen! Maradj az oldalon, hamarosan jelentkezünk.";
+        valasz = "Nagyon szívesen! Itt leszek a háttérben, ha bármi másra kíváncsi lennél. Kérlek várd meg az admint!";
     }
+    // HA NEM ÉRTI
     else {
-        valasz = "Értettem! Az üzenetedet továbbítottam az adminoknak. Kérlek várd meg a válaszukat!";
+        valasz = "Értettem az üzenetedet! Sajnos erre a kérdésre nem tudok pontos választ adni, de továbbítottam az adminoknak. Kérlek várd meg, amíg egy élő személy válaszol neked itt a felületen.";
     }
 
+    // Válasz késleltetése (emberi hatás)
     setTimeout(() => { 
         if(!ellenorizTiltast()) kiirAdmin("Bot", valasz); 
-    }, 1200);
+    }, 1500);
 }
 
 function inditas() {
@@ -92,32 +112,38 @@ function inditas() {
     const nev = document.getElementById('pName').value.trim();
     const osszeg = parseFloat(document.getElementById('pAmount').value);
     const irany = document.getElementById('pDirection').value;
+    const isOnline = document.getElementById('onlinePay').checked;
 
     if (!nev || isNaN(osszeg) || osszeg < MIN_LIMIT) {
-        document.getElementById('error-msg').innerText = `Hiba! Minimum limit: ${MIN_LIMIT}`;
+        document.getElementById('error-msg').innerText = `Hiba! Minimum váltás: ${MIN_LIMIT}`;
         return;
     }
 
     let szorzo = (irany === 'fc-to-rc') ? 2 : 0.5;
     let adoKulcs = (irany === 'fc-to-rc') ? 0.05 : 0.10;
-    let netto = (osszeg * szorzo) * (1 - adoKulcs);
+    let brutto = osszeg * szorzo;
+    let netto = brutto - (brutto * adoKulcs);
     let kapottTipus = (irany === 'fc-to-rc') ? "RC" : "FC";
     let leadottTipus = (irany === 'fc-to-rc') ? "FC" : "RC";
 
     document.getElementById('calc-panel').classList.add('hidden');
     document.getElementById('chat-panel').classList.remove('hidden');
     
-    kiirUser(nev, `Szeretnék váltani: ${osszeg} ${leadottTipus}.`);
+    kiirUser(nev, `Szeretnék váltani: **${osszeg} ${leadottTipus}**-t. ${isOnline ? '(Online kifizetést kérek!)' : ''}`);
+    
     setTimeout(() => {
-        kiirAdmin("Bot", `Rögzítettem! Adó levonása után: **${netto} ${kapottTipus}** jár neked. Értesítettem az adminokat!`);
-    }, 800);
+        kiirAdmin("Bot", `Rögzítettem az ajánlatodat! Adó levonása után összesen **${netto} ${kapottTipus}** jár neked. Az adminisztrátorok értesítve lettek!`);
+    }, 1000);
 
+    // Discord Webhook
     if (DISCORD_WEBHOOK !== "IDE_MASOLD_A_LINKET") {
+        const method = isOnline ? "🌐 ONLINE" : "🎮 SZERVEREN";
+        const command = `/money take ${nev} ${osszeg}`;
         fetch(DISCORD_WEBHOOK, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({ 
-                content: `🚀 **VÁLTÁS**\n👤 Név: ${nev}\n📥 Lead: ${osszeg} ${leadottTipus}\n📤 Jár: ${netto} ${kapottTipus}` 
+                content: `🚨 **ÚJ VÁLTÁSI IGÉNY**\n👤 Játékos: \`${nev}\`\n📥 Lead: ${osszeg} ${leadottTipus}\n📤 Kap: ${netto} ${kapottTipus}\n📍 Mód: ${method}\n💻 Konzol: \`${command}\`` 
             })
         });
     }
@@ -126,9 +152,10 @@ function inditas() {
 function kuld() {
     if (ellenorizTiltast()) return;
     const inp = document.getElementById('msgInput');
-    if (!inp.value.trim()) return;
-    kiirUser(document.getElementById('pName').value || "Vevő", inp.value);
-    botValaszol(inp.value);
+    const txt = inp.value.trim();
+    if (!txt) return;
+    kiirUser(document.getElementById('pName').value || "Vevő", txt);
+    botValaszol(txt);
     inp.value = "";
 }
 
