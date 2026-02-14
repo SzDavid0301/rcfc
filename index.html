@@ -2,47 +2,33 @@
 <html lang="hu">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RC-FC Kereskedő Központ</title>
+    <title>Kereskedelmi Chat</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
     <div class="container">
-        <div id="calc-panel" class="box">
-            <h2>Kereskedelmi Panel</h2>
-            <div class="input-group">
-                <label>Játékosneved:</label>
-                <input type="text" id="pName" placeholder="Játékosnév">
-            </div>
-            <div class="input-group">
-                <label>Mennyiség:</label>
-                <input type="number" id="pAmount" placeholder="1000">
-                <div id="error-msg" style="color: #ff4d4d; font-size: 14px; margin-top: 5px; min-height: 20px;"></div>
-            </div>
-            <div class="input-group">
-                <label>Váltás típusa:</label>
-                <select id="pDirection">
-                    <option value="fc-to-rc">FC-t adok (RC x2 jár)</option>
-                    <option value="rc-to-fc">RC-t adok (FC /2 jár)</option>
-                </select>
-            </div>
-            <button class="main-btn" onclick="inditas()">Ajánlat küldése</button>
+        <div id="calc-panel">
+            <h2>💰 Váltó Rendszer</h2>
+            <input type="text" id="pName" placeholder="Neved...">
+            <select id="pDirection">
+                <option value="fc-to-rc">FC -> RC (5% adó)</option>
+                <option value="rc-to-fc">RC -> FC (10% adó)</option>
+            </select>
+            <input type="number" id="pAmount" placeholder="Összeg (min. 1000)">
+            <div id="error-msg"></div>
+            <button onclick="inditas()">Ajánlat kérése</button>
         </div>
 
-        <div id="chat-panel" class="box hidden">
-            <div class="chat-header">
-                <h3>Ügyfélszolgálat</h3>
-                <button class="back-btn" onclick="vissza()">« Vissza</button>
-            </div>
-            <div id="chat-logs" class="chat-window"></div>
+        <div id="chat-panel" class="hidden">
+            <h2>💬 Élő Ügyfélszolgálat</h2>
+            <div id="chat-logs"></div>
             <div class="chat-input-area">
-                <input type="text" id="msgInput" placeholder="Írj a botnak...">
+                <input type="text" id="msgInput" placeholder="Üzenet küldése...">
                 <button onclick="kuld()">Küldés</button>
             </div>
+            <button class="back-btn" onclick="vissza()">Vissza</button>
         </div>
     </div>
-
     <script src="script.js"></script>
 </body>
 </html>
