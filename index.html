@@ -2,6 +2,7 @@
 <html lang="hu">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kereskedelmi Panel</title>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -18,10 +19,17 @@
             
             <input type="number" id="pAmount" placeholder="Összeg (min. 1000)">
             
-            <div style="text-align: left; margin: 10px 5px; font-size: 13px; color: #8b949e;">
-                <input type="checkbox" id="onlinePay" style="width: auto; margin-right: 8px;"> 
-                <label for="onlinePay">Online levonást kérek (nem lépek fel)</label>
+            <p class="table-label">Mikor érsz rá? (Válassz egyet)</p>
+            <div id="time-table">
+                <div class="time-slot" onclick="valasztIdo(this)">15:00</div>
+                <div class="time-slot" onclick="valasztIdo(this)">16:00</div>
+                <div class="time-slot" onclick="valasztIdo(this)">17:00</div>
+                <div class="time-slot" onclick="valasztIdo(this)">18:00</div>
+                <div class="time-slot" onclick="valasztIdo(this)">19:00</div>
+                <div class="time-slot" onclick="valasztIdo(this)">20:00</div>
+                <div class="time-slot" onclick="valasztIdo(this)">21:00</div>
             </div>
+            <input type="hidden" id="selectedTime" value="">
 
             <div id="error-msg"></div>
             <button onclick="inditas()">Ajánlat küldése</button>
@@ -31,10 +39,10 @@
             <h2>💬 Élő Chat</h2>
             <div id="chat-logs"></div>
             <div class="chat-input-area">
-                <input type="text" id="msgInput" placeholder="Írj valamit...">
+                <input type="text" id="msgInput" placeholder="Kérdezz a Bot-tól...">
                 <button onclick="kuld()">Küldés</button>
             </div>
-            <button class="back-btn" onclick="vissza()">Vissza</button>
+            <button class="back-btn" onclick="vissza()">Vissza a kalkulátorhoz</button>
         </div>
     </div>
     <script src="script.js"></script>

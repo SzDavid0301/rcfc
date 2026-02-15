@@ -7,4 +7,3 @@ fyremcben az adot bele tenni
 ami kell bele 
 normalis beszelgetesben a bot
 mukodo weboldal rendesen lehessen hasznalni
-nem kell jatekba oda adni a rc vagy fc

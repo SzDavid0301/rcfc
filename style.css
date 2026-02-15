@@ -1,84 +1,36 @@
-/* ALAP DESIGN (A régi kékes) */
-body {
-    font-family: 'Segoe UI', sans-serif;
-    background-color: #0b0e14;
-    color: #e1e1e1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
+:root {
+    --bg: #0d1117;
+    --card: #161b22;
+    --border: #30363d;
+    --blue: #58a6ff;
+    --text: #e6edf3;
 }
 
-.container {
-    background-color: #161b22;
-    padding: 30px;
-    border-radius: 15px;
-    width: 380px;
-    text-align: center;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    border: 1px solid #21262d;
-}
+body { font-family: sans-serif; background: var(--bg); color: var(--text); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+.container { background: var(--card); padding: 25px; border-radius: 12px; width: 360px; border: 1px solid var(--border); }
+h2 { color: var(--blue); margin-top: 0; text-align: center; }
 
-h2 { color: #58a6ff; margin-bottom: 20px; }
+input, select, button { width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); color: white; box-sizing: border-box; }
+button { background: #1f6feb; border: none; font-weight: bold; cursor: pointer; }
+button:hover { background: var(--blue); }
 
-input, select, button {
-    width: 100%;
-    padding: 12px;
-    margin: 8px 0;
-    border-radius: 8px;
-    border: 1px solid #30363d;
-    background: #0d1117;
-    color: white;
-    box-sizing: border-box;
-}
+/* IDŐPONT TÁBLÁZAT */
+.table-label { font-size: 13px; color: #8b949e; margin: 15px 0 5px 0; }
+#time-table { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 15px; }
+.time-slot { background: var(--bg); border: 1px solid var(--border); padding: 8px; border-radius: 6px; font-size: 12px; text-align: center; cursor: pointer; }
+.time-slot:hover { border-color: var(--blue); }
+.time-slot.selected { background: var(--blue); color: white; border-color: var(--blue); font-weight: bold; }
 
-button {
-    background-color: #1f6feb;
-    border: none;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-button:hover { background-color: #388bfd; }
-
-.hidden { display: none; }
-#error-msg { color: #ff7b72; font-size: 13px; margin-bottom: 5px; }
-
-/* CHAT ELRENDEZÉS (Az új Messenger-stílus) */
-#chat-logs {
-    height: 300px;
-    overflow-y: auto;
-    background: #0d1117;
-    padding: 15px;
-    border-radius: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #30363d;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
+#chat-logs { height: 300px; overflow-y: auto; background: #090c10; padding: 15px; border-radius: 10px; display: flex; flex-direction: column; gap: 10px; border: 1px solid var(--border); }
 .msg-wrapper { display: flex; width: 100%; }
-.user-wrapper { justify-content: flex-end; } /* Jobbra tolja a vevőt */
-.admin-wrapper { justify-content: flex-start; } /* Balra tolja a botot */
-
-.msg {
-    max-width: 85%;
-    padding: 10px 14px;
-    border-radius: 15px;
-    font-size: 14px;
-    text-align: left;
-    line-height: 1.4;
-}
-
-.user { background-color: #0084ff; color: white; border-bottom-right-radius: 2px; }
-.admin { background-color: #30363d; color: #e1e1e1; border-bottom-left-radius: 2px; }
-
-.msg b { display: block; font-size: 10px; margin-bottom: 3px; opacity: 0.7; }
-
-.chat-input-area { display: flex; gap: 5px; }
-#msgInput { flex-grow: 1; margin: 0; }
-.chat-input-area button { width: auto; margin: 0; padding: 0 15px; }
-.back-btn { background: #21262d; color: #8b949e; margin-top: 10px; }
+.user-wrapper { justify-content: flex-end; }
+.admin-wrapper { justify-content: flex-start; }
+.msg { max-width: 80%; padding: 10px; border-radius: 15px; font-size: 14px; }
+.user { background: #0084ff; border-bottom-right-radius: 2px; }
+.admin { background: #30363d; border-bottom-left-radius: 2px; }
+.msg b { display: block; font-size: 10px; opacity: 0.6; }
+.chat-input-area { display: flex; gap: 5px; margin-top: 10px; }
+#msgInput { margin: 0; }
+.back-btn { background: transparent; color: #8b949e; text-decoration: underline; font-size: 12px; }
+#error-msg { color: #ff7b72; font-size: 12px; height: 15px; }
+.hidden { display: none; }
