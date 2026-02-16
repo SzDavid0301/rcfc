@@ -9,7 +9,7 @@ const csunyaSzavak = [
     "szopjal", "faszfej", "gecilada", "kurvafi", "anyadat", "fasszop", "f@sszop", "nyomorek",
     "fogyatekos", "gecis", "geciz", "basz", "baszki", "baszdmeg", "faszom", "gecim", "kurvane",
     "cigany", "nigga", "nigger", "zsidozas", "naci", "hitler", "kurvanyad", "anyadert", "kurvulsz",
-    "dogolj meg", "rohadj meg" 
+    "dogolj meg", "rohadj meg", "meleg"
 ];
 
 window.onload = function() {
